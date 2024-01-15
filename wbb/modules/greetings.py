@@ -272,6 +272,11 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
                 caption=text,
                 reply_markup=keyb,
             )
+        elif welcome == "sticker":
+            m = await app.send_sticker(
+                chat.id,
+                sticker=file_id,
+            )
         else:
             m = await app.send_animation(
                 chat.id,
@@ -443,6 +448,10 @@ async def set_welcome_func(_, message):
         if not replied_message:
             await message.reply_text(usage, reply_markup=key)
             return
+        if replied_message.sticker:
+            welcome = "sticker"
+            file_id = replied_message.sticker.file_id
+            raw_text = "something"
         if replied_message.animation:
             welcome = "Animation"
             file_id = replied_message.animation.file_id
